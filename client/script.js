@@ -78,7 +78,18 @@ sayHelloButton.addEventListener('click', sayHello)
 const ohMy = () => {
    axios.get('http://localhost:3000/animals')
    .then((response) => {
-    console.log(response)
+    for (let i = 0; i < response.data.length; i++) {
+        let newElement = document.createElement('p')
+        newElement.textContent=response.data[i]
+        document.querySelector('body').appendChild(newElement)
+
+    }
+    //     createCharacterCard(response.data[i])
+    //   }
+    // console.log(response)
+   })
+   .catch((error) => {
+    console.log(error)
    })
 }
 
@@ -106,7 +117,7 @@ const repeatMyParam = () => {
         repeat.textContent = response.data
         repeat.style.display = 'block'
 
-        console.log(response)
+        console.log(response.data)
     })
 }
 
@@ -136,9 +147,9 @@ document.getElementById('repeat-button').addEventListener('click', repeatMyParam
 
 // CODE HERE
 const newQuery = () => {
-    axios.get('http://localhost:3000/query-test/?Kajsia')
+    axios.get('http://localhost:3000/query-test/?name=Kajsia')
     .then((response) => {
-        console.log(response)
+        console.log(response.data)
     })
 }
 document.getElementById('query-button').addEventListener('click', newQuery)
@@ -193,4 +204,63 @@ document.getElementById('query-button').addEventListener('click', newQuery)
     Based on what we did earlier to display this type of data, write code that will display the response in your HTML document. 
 */
 
-// CODE HERE 
+// // CODE HERE 
+// const form = document.querySelector('form')
+
+// const createFood = (event) => {
+//     event.preventDefault()
+//     const foodInput = document.querySelector('input')
+
+//     const newFood = foodInput.value
+
+//     let body =  {
+//         newFood
+//     }
+
+//     axios.post('http://localhost:3000/food', body)
+//     .then((response) => {
+//         console.log(response.data)
+
+//         const parent = document.querySelector('section')
+//         response.data.forEach(food => {
+//             const item = document.createElement('p').textContent = food
+//             parent.appendChild(item)
+//         });
+
+//     })
+//     .catch((error) => {
+//         console.log(error)
+//     })
+// }
+
+// form.addEventListener('submit', createFood)
+
+
+
+
+
+let newForm = document.querySelector('form')
+
+function createFood (event) {
+    event.preventDefault()
+
+    const foodInput = document.querySelector('input')
+    let body = {
+        newFood: foodInput.value
+    }
+
+    axios.post('http://localhost:3000/food', body)
+    .then((response) => {
+        console.log(response.data)
+        for (let i = 0; i < response.data.length; i++){
+            let newElement = document.createElement('p')
+            newElement.textContent = response.data[i]
+            document.querySelector('body').appendChild(newElement)
+        }
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+}
+
+newForm.addEventListener('submit', createFood)
