@@ -205,62 +205,37 @@ document.getElementById('query-button').addEventListener('click', newQuery)
 */
 
 // // CODE HERE 
-// const form = document.querySelector('form')
-
-// const createFood = (event) => {
-//     event.preventDefault()
-//     const foodInput = document.querySelector('input')
-
-//     const newFood = foodInput.value
-
-//     let body =  {
-//         newFood
-//     }
-
-//     axios.post('http://localhost:3000/food', body)
-//     .then((response) => {
-//         console.log(response.data)
-
-//         const parent = document.querySelector('section')
-//         response.data.forEach(food => {
-//             const item = document.createElement('p').textContent = food
-//             parent.appendChild(item)
-//         });
-
-//     })
-//     .catch((error) => {
-//         console.log(error)
-//     })
-// }
-
-// form.addEventListener('submit', createFood)
-
-
 
 
 
 let newForm = document.querySelector('form')
 
-function createFood (event) {
-    event.preventDefault()
-
+function createFood (e) {
+    e.preventDefault()  
+   
     const foodInput = document.querySelector('input')
     let body = {
         newFood: foodInput.value
     }
 
-    axios.post('http://localhost:3000/food', body)
-    .then((response) => {
-        console.log(response.data)
-        for (let i = 0; i < response.data.length; i++){
-            let newElement = document.createElement('p')
-            newElement.textContent = response.data[i]
-            document.querySelector('body').appendChild(newElement)
-        }
-    })
-    .catch((error) => {
-        console.log(error)
-    })
+    if (foodInput.value) {
+        axios.post('http://localhost:3000/food', body)
+        .then((response) => {
+            for (let i = 0; i < response.data.length; i++){
+                const currentNodes = document.querySelectorAll('p')
+                const ArrayList = Array.apply(null, currentNodes);
+                const check = ArrayList.filter(el => el.textContent === response.data[i]);
+                if (check.length === 0) {
+                    const newElement = document.createElement('p')
+                    newElement.textContent = response.data[i]
+                    document.querySelector('body').appendChild(newElement)
+                }
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
 }
 
 newForm.addEventListener('submit', createFood)
